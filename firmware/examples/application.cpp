@@ -37,6 +37,7 @@ void setup()
     speaker.begin();
 
     speaker.setTempo(240);
+    // see https://github.com/Amiqual4Home/MelodySpeaker for coding convention
     speaker.setMelody("4C7,8G6,8G6,4A6,4G6,4  ,4B6,4C7");
 }
 
