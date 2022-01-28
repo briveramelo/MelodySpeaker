@@ -26,7 +26,7 @@
 #define melody_speaker__h
 
 
-typedef void (*CallbackType)(void);
+typedef void (*CallbackType)();
 
 class MelodySpeaker {
 

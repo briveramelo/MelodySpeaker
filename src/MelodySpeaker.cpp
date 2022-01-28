@@ -24,6 +24,7 @@
 /* Melody playing class */
 
 #include <math.h>
+#include "application.h"
 #include "MelodySpeaker.h"
 
 MelodySpeaker::MelodySpeaker(uint8_t speakerpin, bool mode) {
@@ -38,6 +39,8 @@ MelodySpeaker::MelodySpeaker(uint8_t speakerpin, bool mode) {
 
 
 MelodySpeaker::~MelodySpeaker(void) {
+    delete[] duration;
+    delete[] frequency;
 }
 
 
