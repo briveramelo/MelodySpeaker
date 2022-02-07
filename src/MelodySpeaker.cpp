@@ -121,6 +121,14 @@ void MelodySpeaker::processMelody(void) {
     }
 }
 
+void MelodySpeaker::stop()
+{
+    delete[] duration;
+    delete[] frequency;
+    itemEnd = 0;
+    cursor = 0;
+    len = 0;
+}
 
 uint16_t MelodySpeaker::codeToFrequency(char tone, char scale) {
     float f=1.0;
