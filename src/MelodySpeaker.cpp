@@ -28,6 +28,8 @@
 #include "MelodySpeaker.h"
 
 MelodySpeaker::MelodySpeaker(uint8_t speakerpin, bool mode) {
+    duration.reserve(43);
+    frequency.reserve(43);
     blocking = mode;
     pin = speakerpin;
     len = 0;
@@ -36,13 +38,6 @@ MelodySpeaker::MelodySpeaker(uint8_t speakerpin, bool mode) {
     callback = NULL;
     setTempo(120);
 }
-
-
-MelodySpeaker::~MelodySpeaker(void) {
-    delete[] duration;
-    delete[] frequency;
-}
-
 
 void MelodySpeaker::begin(void) {
     pinMode(pin, OUTPUT);
@@ -69,17 +64,16 @@ void MelodySpeaker::setMelody(char* melodycode) {
         return;
     }
     len = (1+strlen(melodycode))/4; // +1 is for the missing coma at the end of melody string
-
-    duration  = new uint16_t [len];
-    frequency = new uint16_t [len];
+    duration.clear();
+    frequency.clear();
     cursor = 0;
     itemEnd = 0;
 
-    for (int i = 0; i< len; ++i) {
-        frequency[i] = codeToFrequency(melodycode[i*4+1], melodycode[i*4+2]);
+    for (int i = 0; i < len; ++i) {
+        duration.push_back(codeToDuration(melodycode[i*4]));
         // to calculate the note duration, take one second and divide it by note type
         // e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.
-        duration[i] = codeToDuration(melodycode[i*4]);
+        frequency.push_back(codeToFrequency(melodycode[i*4+1], melodycode[i*4+2]));
     }
 }
 
@@ -93,8 +87,8 @@ void MelodySpeaker::processMelody(void) {
             tone(pin, frequency[i], duration[i]);
             delay(duration[i]*pause);
         }
-        delete[] duration;
-        delete[] frequency;
+        duration.clear();
+        frequency.clear();
         len = 0;
         return;
     }
@@ -112,8 +106,8 @@ void MelodySpeaker::processMelody(void) {
         itemEnd = 0;
     }
     if(cursor >= len) {
-        delete[] duration;
-        delete[] frequency;
+        duration.clear();
+        frequency.clear();
         len = 0;
     }
     if(callback) {
@@ -123,8 +117,8 @@ void MelodySpeaker::processMelody(void) {
 
 void MelodySpeaker::stop()
 {
-    delete[] duration;
-    delete[] frequency;
+    duration.clear();
+    frequency.clear();
     itemEnd = 0;
     cursor = 0;
     len = 0;

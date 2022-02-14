@@ -21,6 +21,7 @@
 */
 
 #include "application.h"
+#include "vector"
 
 #ifndef melody_speaker__h
 #define melody_speaker__h
@@ -33,7 +34,7 @@ class MelodySpeaker {
     public:
 
         MelodySpeaker(uint8_t pin, bool blocking = true);
-        ~MelodySpeaker();
+        ~MelodySpeaker(){}
 
         void 
             begin(),
@@ -46,21 +47,16 @@ class MelodySpeaker {
 
     private:
 
-        bool
-            blocking;
+        bool blocking;
         uint8_t
             pin,
             cursor,
             len;
-        uint16_t
-            wholeNote; // related to tempo
-        uint16_t
-            *duration,
-            *frequency;
-        unsigned long
-            itemEnd;
-        float
-            pause;
+        uint16_t wholeNote; // related to tempo
+        std::vector<uint16_t> duration;
+        std::vector<uint16_t> frequency;
+        unsigned long itemEnd;
+        float pause;
         CallbackType callback;
 
         uint16_t codeToFrequency(char, char);
