@@ -1,3 +1,5 @@
+#include "main/GlobalMacros.h"
+#if MELODY_LIB == 1
 /*
   Copyright (c) 2016 Inria, Stan Borkowski
 
@@ -168,3 +170,5 @@ uint16_t MelodySpeaker::codeToDuration(char length) {
     }
     return wholeNote/fraction;
 }
+
+#endif
