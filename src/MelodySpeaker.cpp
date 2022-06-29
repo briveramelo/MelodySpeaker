@@ -29,9 +29,9 @@
 #include "application.h"
 #include "MelodySpeaker.h"
 
-MelodySpeaker::MelodySpeaker(uint8_t speakerpin, bool mode) {
-    duration.reserve(43);
-    frequency.reserve(43);
+MelodySpeaker::MelodySpeaker(uint8_t speakerpin, int maxNotes, bool mode) {
+    duration.reserve(maxNotes);
+    frequency.reserve(maxNotes);
     blocking = mode;
     pin = speakerpin;
     len = 0;
@@ -61,7 +61,7 @@ void MelodySpeaker::setTempo(uint16_t beatsPerMinute) {
 }
 
 
-void MelodySpeaker::setMelody(char* melodycode) {
+void MelodySpeaker::setMelody(const char* melodycode) {
     int melodyCodeLen = strlen(melodycode);
     if(melodyCodeLen < 3) {
         return;

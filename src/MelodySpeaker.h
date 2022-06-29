@@ -35,14 +35,14 @@ class MelodySpeaker {
 
     public:
 
-        MelodySpeaker(uint8_t pin, bool blocking = true);
+        MelodySpeaker(uint8_t pin, int maxNotes, bool blocking = true);
         ~MelodySpeaker(){}
 
         void 
             begin(),
             setInterNotePause(float noteRatio),
             setTempo(uint16_t beatsPerMinute), // tempo applies only to the next setMelody call. Mind call order.
-            setMelody(char* melody),
+            setMelody(const char* melody),
             processMelody(),
             onEnd(CallbackType callback),
             stop();
