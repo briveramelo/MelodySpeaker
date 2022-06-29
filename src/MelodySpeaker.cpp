@@ -37,7 +37,7 @@ MelodySpeaker::MelodySpeaker(uint8_t speakerpin, int maxNotes, bool mode) {
     len = 0;
     itemEnd = 0;
     pause = 1.3;
-    callback = NULL;
+    onMelodyEnd = NULL;
     setTempo(120);
 }
 
@@ -46,8 +46,8 @@ void MelodySpeaker::begin(void) {
 }
 
 
-void MelodySpeaker::onEnd(CallbackType callback) {
-    this->callback = callback;
+void MelodySpeaker::setOnMelodyEnd(CallbackType onMelodyEnd) {
+    this->onMelodyEnd = onMelodyEnd;
 }
 
 
@@ -112,9 +112,9 @@ void MelodySpeaker::processMelody(void) {
         duration.clear();
         frequency.clear();
         len = 0;
-    }
-    if(callback) {
-        callback();
+        if(onMelodyEnd) {
+            onMelodyEnd();
+        }
     }
 }
 
