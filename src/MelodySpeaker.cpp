@@ -47,7 +47,7 @@ void MelodySpeaker::begin(void) {
 
 
 void MelodySpeaker::onEnd(CallbackType callback) {
-    callback = callback;
+    this->callback = callback;
 }
 
 
@@ -62,10 +62,11 @@ void MelodySpeaker::setTempo(uint16_t beatsPerMinute) {
 
 
 void MelodySpeaker::setMelody(char* melodycode) {
-    if(strlen(melodycode) < 3) {
+    int melodyCodeLen = strlen(melodycode);
+    if(melodyCodeLen < 3) {
         return;
     }
-    len = (1+strlen(melodycode))/4; // +1 is for the missing coma at the end of melody string
+    len = (1+melodyCodeLen)/4; // +1 is for the missing coma at the end of melody string
     duration.clear();
     frequency.clear();
     cursor = 0;
@@ -126,15 +127,15 @@ void MelodySpeaker::stop()
     len = 0;
 }
 
-uint16_t MelodySpeaker::codeToFrequency(char tone, char scale) {
+uint16_t MelodySpeaker::codeToFrequency(char tone, char octave) {
     float f=1.0;
     float freq = 0.0;
-    switch(scale) {
+    switch(octave) {
         case '7': f=8.0; break;
         case '6': f=4.0; break;
         case '5': f=2.0; break;
         case '3': f=0.5; break;
-        case '2': f=0.25;
+        case '2': f=0.25; break;
         case '1': f=0.125;
     } // alt: f=2^((scale-4))
     switch(tone) {
