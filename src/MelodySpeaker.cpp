@@ -38,6 +38,8 @@ MelodySpeaker::MelodySpeaker(uint8_t speakerpin, int maxNotes, bool mode) {
     itemEnd = 0;
     pause = 1.3;
     onMelodyEnd = NULL;
+    onToneStart = NULL;
+    onToneEnd = NULL;
     setTempo(120);
 }
 
@@ -46,8 +48,10 @@ void MelodySpeaker::begin(void) {
 }
 
 
-void MelodySpeaker::setOnMelodyEnd(CallbackType onMelodyEnd) {
+void MelodySpeaker::setCallbacks(CallbackType onMelodyEnd, CallbackType onToneStart, CallbackType onToneEnd) {
     this->onMelodyEnd = onMelodyEnd;
+    this->onToneStart = onToneStart;
+    this->onToneEnd = onToneEnd;
 }
 
 
@@ -87,17 +91,29 @@ void MelodySpeaker::processMelody(void) {
     }
     if (blocking) {
         for(int i=0; i<len; ++i) {
+            if(onToneStart) {
+                onToneStart();
+            }
             tone(pin, frequency[i], duration[i]);
             delay(duration[i]*pause);
+            if(onToneEnd) {
+                onToneEnd();
+            }
         }
         duration.clear();
         frequency.clear();
         len = 0;
+        if(onMelodyEnd) {
+            onMelodyEnd();
+        }
         return;
     }
 
 
     if(itemEnd == 0) {
+        if(onToneStart) {
+            onToneStart();
+        }
         tone(pin, frequency[cursor], duration[cursor]);
         itemEnd = millis()+duration[cursor]*pause;
         return;
@@ -107,6 +123,9 @@ void MelodySpeaker::processMelody(void) {
     } else { // jump to next tone
         ++cursor;
         itemEnd = 0;
+        if(onToneEnd) {
+            onToneEnd();
+        }
     }
     if(cursor >= len) {
         duration.clear();

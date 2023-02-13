@@ -44,7 +44,7 @@ class MelodySpeaker {
             setTempo(uint16_t beatsPerMinute), // tempo applies only to the next setMelody call. Mind call order.
             setMelody(const char* melody),
             processMelody(),
-            setOnMelodyEnd(CallbackType callback),
+            setCallbacks(CallbackType onMelodyEnd, CallbackType onToneStart, CallbackType onToneEnd),
             stop();
 
     private:
@@ -60,6 +60,8 @@ class MelodySpeaker {
         unsigned long itemEnd;
         float pause;
         CallbackType onMelodyEnd;
+        CallbackType onToneStart;
+        CallbackType onToneEnd;
 
         uint16_t codeToFrequency(char, char);
         uint16_t codeToDuration(char);
