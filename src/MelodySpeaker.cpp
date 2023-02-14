@@ -47,23 +47,19 @@ void MelodySpeaker::begin(void) {
     pinMode(pin, OUTPUT);
 }
 
-
 void MelodySpeaker::setCallbacks(CallbackType onMelodyEnd, CallbackType onToneStart, CallbackType onToneEnd) {
     this->onMelodyEnd = onMelodyEnd;
     this->onToneStart = onToneStart;
     this->onToneEnd = onToneEnd;
 }
 
-
 void MelodySpeaker::setInterNotePause(float noteRatio) {
     pause = 1.0+noteRatio;
 }
 
-
 void MelodySpeaker::setTempo(uint16_t beatsPerMinute) {
     wholeNote = 240000/beatsPerMinute;
 }
-
 
 void MelodySpeaker::setMelody(const char* melodycode) {
     int melodyCodeLen = strlen(melodycode);
@@ -83,7 +79,6 @@ void MelodySpeaker::setMelody(const char* melodycode) {
         frequency.push_back(codeToFrequency(melodycode[i*4+1], melodycode[i*4+2]));
     }
 }
-
 
 void MelodySpeaker::processMelody(void) {
     if(len == 0) {
@@ -173,7 +168,6 @@ uint16_t MelodySpeaker::codeToFrequency(char tone, char octave) {
     }
     return (uint16_t)roundf(freq*f);
 }
-
 
 uint16_t MelodySpeaker::codeToDuration(char length) {
     uint16_t fraction=1;
