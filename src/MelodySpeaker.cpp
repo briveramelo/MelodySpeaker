@@ -47,7 +47,7 @@ void MelodySpeaker::begin(void) {
     pinMode(pin, OUTPUT);
 }
 
-void MelodySpeaker::setCallbacks(CallbackType onMelodyEnd, CallbackType onToneStart, CallbackType onToneEnd) {
+void MelodySpeaker::setCallbacks(CallbackType onMelodyEnd, IntCallback onToneStart, IntCallback onToneEnd) {
     this->onMelodyEnd = onMelodyEnd;
     this->onToneStart = onToneStart;
     this->onToneEnd = onToneEnd;
@@ -87,13 +87,15 @@ void MelodySpeaker::processMelody(void) {
     if (blocking) {
         for(int i=0; i<len; ++i) {
             if(onToneStart) {
-                onToneStart();
+                onToneStart(pin);
             }
+            isTonePlaying = true;
             tone(pin, frequency[i], duration[i]);
             delay(duration[i]*pause);
             if(onToneEnd) {
-                onToneEnd();
+                onToneEnd(pin);
             }
+            isTonePlaying = false;
         }
         duration.clear();
         frequency.clear();
@@ -107,8 +109,9 @@ void MelodySpeaker::processMelody(void) {
 
     if(itemEnd == 0) {
         if(onToneStart) {
-            onToneStart();
+            onToneStart(pin);
         }
+        isTonePlaying = true;
         tone(pin, frequency[cursor], duration[cursor]);
         itemEnd = millis()+duration[cursor]*pause;
         return;
@@ -119,8 +122,9 @@ void MelodySpeaker::processMelody(void) {
         ++cursor;
         itemEnd = 0;
         if(onToneEnd) {
-            onToneEnd();
+            onToneEnd(pin);
         }
+        isTonePlaying = false;
     }
     if(cursor >= len) {
         duration.clear();
@@ -136,6 +140,14 @@ void MelodySpeaker::stop()
 {
     duration.clear();
     frequency.clear();
+    if(isTonePlaying)
+    {
+        if(onToneEnd)
+        {
+            onToneEnd(pin);
+        }
+        isTonePlaying = false;
+    }
     itemEnd = 0;
     cursor = 0;
     len = 0;
