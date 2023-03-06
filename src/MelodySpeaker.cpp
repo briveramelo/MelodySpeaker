@@ -47,7 +47,7 @@ void MelodySpeaker::begin(void) {
     pinMode(pin, OUTPUT);
 }
 
-void MelodySpeaker::setCallbacks(CallbackType onMelodyEnd, IntCallback onToneStart, IntCallback onToneEnd) {
+void MelodySpeaker::setCallbacks(std::function<void()> onMelodyEnd, std::function<void(int)> onToneStart, std::function<void(int)> onToneEnd) {
     this->onMelodyEnd = onMelodyEnd;
     this->onToneStart = onToneStart;
     this->onToneEnd = onToneEnd;

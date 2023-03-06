@@ -29,9 +29,6 @@
 #define melody_speaker__h
 
 
-typedef void (*CallbackType)();
-typedef void (*IntCallback)(int);
-
 class MelodySpeaker {
 
     public:
@@ -45,7 +42,7 @@ class MelodySpeaker {
             setTempo(uint16_t beatsPerMinute), // tempo applies only to the next setMelody call. Mind call order.
             setMelody(const char* melody),
             processMelody(),
-            setCallbacks(CallbackType onMelodyEnd, IntCallback onToneStart, IntCallback onToneEnd),
+            setCallbacks(std::function<void()> onMelodyEnd, std::function<void(int)> onToneStart, std::function<void(int)> onToneEnd),
             stop();
 
     private:
@@ -61,9 +58,9 @@ class MelodySpeaker {
         unsigned long itemEnd;
         float pause;
         bool isTonePlaying = false;
-        CallbackType onMelodyEnd;
-        IntCallback onToneStart;
-        IntCallback onToneEnd;
+        std::function<void()> onMelodyEnd = NULL;
+        std::function<void(int)> onToneStart = NULL;
+        std::function<void(int)> onToneEnd = NULL;
 
         uint16_t codeToFrequency(char, char);
         uint16_t codeToDuration(char);
