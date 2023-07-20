@@ -153,6 +153,8 @@ void MelodySpeaker::stop()
     len = 0;
 }
 
+bool MelodySpeaker::isPlaying(){ return isTonePlaying; }
+
 uint16_t MelodySpeaker::codeToFrequency(char tone, char octave) {
     float f=1.0;
     float freq = 0.0;

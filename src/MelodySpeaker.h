@@ -45,6 +45,7 @@ class MelodySpeaker {
             setCallbacks(std::function<void()> onMelodyEnd, std::function<void(int)> onToneStart, std::function<void(int)> onToneEnd),
             stop();
 
+        bool isPlaying();
     private:
 
         bool blocking;
